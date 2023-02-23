@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29414.127
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33408.410
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamJsonRpc.Sample.Client", "StreamJsonRpc.Sample.Client\StreamJsonRpc.Sample.Client.csproj", "{26BF246E-A3B0-4742-B97F-EAD1033E5145}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,7 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamJsonRpc.Sample.Web", "StreamJsonRpc.Sample.Web\StreamJsonRpc.Sample.Web.csproj", "{39866C31-686E-4B5D-AA76-DF0FCACCDE29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamJsonRpc.Sample.Web", "StreamJsonRpc.Sample.Web\StreamJsonRpc.Sample.Web.csproj", "{39866C31-686E-4B5D-AA76-DF0FCACCDE29}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServerApi", "ServerApi\ServerApi.shproj", "{52E6FF5D-581F-4B39-8D51-CE1D99C88ABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,5 +59,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D362BF52-6BAF-410F-A6F8-44CD54B274F0}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ServerApi\ServerApi.projitems*{26bf246e-a3b0-4742-b97f-ead1033e5145}*SharedItemsImports = 5
+		ServerApi\ServerApi.projitems*{52e6ff5d-581f-4b39-8d51-ce1d99c88aba}*SharedItemsImports = 13
+		ServerApi\ServerApi.projitems*{ba923639-f1e6-49f2-9a29-0c10787ba2c8}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

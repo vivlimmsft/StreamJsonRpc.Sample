@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Nerdbank.Streams;
+using ServerApi;
 using StreamJsonRpc;
 
 class Program
@@ -36,10 +38,33 @@ class Program
 
     private static async Task ActAsRpcClientAsync(Stream stream)
     {
-        Console.WriteLine("Connected. Sending request...");
-        using var jsonRpc = JsonRpc.Attach(stream);
-        int sum = await jsonRpc.InvokeAsync<int>("Add", 3, 5);
-        Console.WriteLine($"3 + 5 = {sum}");
+        using (var service = JsonRpc.Attach<IServerApi>(stream))
+        {
+            // If you have anything that could cancel this operation, you should use a real cancellationtoken here
+            var cancellationToken = CancellationToken.None;
+
+            Console.WriteLine("Connected. Sending request...");
+            Console.WriteLine($"Using service to convert to uppercase: {await service.TopLevelApiThatJustUppercasesAStringAsync("hello world", cancellationToken)}");
+
+            // Call method that returns a marshalled object implementing INestedApi. It must be disposed!
+            using (var nestedApi = await service.GetNestedApiAsync("16 ounce", cancellationToken))
+            {
+                // Use it; it just concatenates the string it was constructed with to the argument
+                var nestedApiResult = await nestedApi.ConcatenateWithConstructedArgumentAsync("oat milk latte", cancellationToken);
+                Console.WriteLine($"nested api call result: {nestedApiResult}"); // Should read "16 ounce oat milk latte"
+
+                // I found that passing a marshaled proxy back to the server is not allowed: `NotSupportedException: Marshaling a proxy back to its owner`
+                // Leaving the code here but commented to demonstrate the sort of thing you *can't* do
+                // Call a method on the service that casts the marshalled object back into the concrete type, and modifies a member to make the string it was passed ALL UPPERCASE
+                //await service.NestedApiMutatorAsync(nestedApi, cancellationToken); // It doesn't return anything, the modification happens only on the server
+
+                // Call the same method on the marshalled object which should be modified on the server side.
+                //var nestedApiResult2 = await nestedApi.DoAThingGetAStringAsync("oat milk latte", cancellationToken);
+                //Console.WriteLine($"nested api call result: {nestedApiResult2}"); // Should read "16 OUNCE oat milk latte"
+            }
+
+
+        }
     }
 
     private static string FindPathToServer()
